@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Contact
+    </ion-title>
+    <ion-buttons end>
+    <button ion-button icon-only (click)="addContact()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+</ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header>List of contacts</ion-list-header>
+    <ion-item-sliding #slidingItem *ngFor="let contact of contacts | async">
+      <ion-item  (click)="details(contact, slidingItem)">
+          <p>{{contact.name}}</p>
+          <p>{{contact.email}}</p>
+          <p>{{contact.phone}}</p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="removeContact(contact.$key, slidingItem)">
+          <ion-icon name="md-trash"></ion-icon>
+          Delete
+        </button>
+      </ion-item-options>
+      <ion-item-options side="left">
+        <button ion-button color="primary" (click)="updateContact(contact)">
+          <ion-icon name="md-create"></ion-icon>
+          Edit
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
