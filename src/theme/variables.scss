@@ -28,7 +28,8 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  custom:     #347eff
 );
 
 
@@ -76,3 +77,10 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+//variables used in login-register-forgot password
+$background-main: #ffffff;
+$background-box: #99ccff;
+$background-button: #0066cc;
+$color-btn: #ffffff;
+       

@@ -3,7 +3,7 @@ import { NavController, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
  
 @Component({
-  selector: 'page-register',
+  selector: 'page-main',
   templateUrl: 'register.html'
 })
 export class RegisterPage {

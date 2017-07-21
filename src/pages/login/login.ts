@@ -6,7 +6,7 @@ import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { TabsPage } from '../tabs/tabs';
  
 @Component({
-  selector: 'page-login',
+  selector: 'page-main',
   templateUrl: 'login.html'
 })
 export class LoginPage {

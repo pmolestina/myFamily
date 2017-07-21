@@ -3,7 +3,7 @@ import { NavController, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
  
 @Component({
-  selector: 'page-forgot-password',
+  selector: 'page-main',
   templateUrl: 'forgot-password.html'
 })
 export class ForgotPasswordPage {

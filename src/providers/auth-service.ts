@@ -5,11 +5,12 @@ import { AngularFire, AuthProviders, AuthMethods, FirebaseApp } from 'angularfir
 import 'rxjs/add/operator/map';
  
 export class User {
+  id: string;
   name: string;
   email: string;
+  lastLogin: string;
  
-  constructor(name: string, email: string) {
-    this.name = name;
+  constructor(email: string) {
     this.email = email;
   }
 }
@@ -27,8 +28,11 @@ export class ValidationResponse {
 export class AuthService {
   currentUser: User;
   firebaseAuth: any;
+  userProfile: any;
+
   constructor(public af: AngularFire, @Inject(FirebaseApp) fa : any){
     this.firebaseAuth= fa.auth();
+    this.userProfile = fa.database().ref('/userProfile');
 
   }
   public login(credentials) {
@@ -49,7 +53,14 @@ export class AuthService {
               method: AuthMethods.Password
             }).then(function (response){
               console.log(response);
-              self.currentUser = new User(credentials.email, credentials.email);
+              self.currentUser = new User(credentials.email);
+              self.currentUser.lastLogin = new Date().toISOString();
+              var userprofile=self.userProfile.child(response.auth.uid);
+              userprofile.set(self.currentUser);
+              userprofile.on('value', function(snapshot){
+                var s = snapshot.val();
+                console.log("User profile: "+ s);
+              });
               validationResponse.validRequest=true;
               observer.next(validationResponse);
               observer.complete();
@@ -73,7 +84,9 @@ export class AuthService {
         let self = this;
         this.af.auth.createUser(credentials).then(function (response){
               console.log(response);
-              self.currentUser = new User(credentials.email, credentials.email);
+              self.currentUser = new User(credentials.email);
+              //create user profile
+              self.userProfile.child(response.auth.uid).set(self.currentUser);
               validationResponse.validRequest=true;
               observer.next(validationResponse);
               observer.complete();

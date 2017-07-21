@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="custom">
     <ion-title>
-      Contact
+      Contacts
     </ion-title>
     <ion-buttons end>
     <button ion-button icon-only (click)="addContact()">
@@ -11,9 +11,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterContacts()"></ion-searchbar>
   <ion-list>
-    <ion-list-header>List of contacts</ion-list-header>
-    <ion-item-sliding #slidingItem *ngFor="let contact of contacts | async">
+    <ion-item-sliding #slidingItem *ngFor="let contact of filteredContacts | async">
       <ion-item  (click)="details(contact, slidingItem)">
           <p>{{contact.name}}</p>
           <p>{{contact.email}}</p>

@@ -9,18 +9,12 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { DetailPage } from '../pages/detail/detail';
 import { AuthService } from '../providers/auth-service';
 import { RegisterPage } from '../pages/register/register';
-import { LogoutPage } from '../pages/logout/logout';
+import { SettingsPage } from '../pages/settings/settings';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
 
-export const firebaseConfig={
-    apiKey: "AIzaSyDgFG2F9dAG2qcD-gFuRgFrGK8xWdN7OTY",
-    authDomain: "thefamily-eb9bb.firebaseapp.com",
-    databaseURL: "https://thefamily-eb9bb.firebaseio.com",
-    storageBucket: "thefamily-eb9bb.appspot.com",
-    messagingSenderId: "91662480324"
-};
+import {firebaseConfig} from './firebase.config';
 
 @NgModule({
   declarations: [
@@ -32,7 +26,7 @@ export const firebaseConfig={
     TabsPage,
     DetailPage,
     RegisterPage,
-    LogoutPage,
+    SettingsPage,
     ForgotPasswordPage
   ],
   imports: [
@@ -49,7 +43,7 @@ export const firebaseConfig={
     TabsPage,
     DetailPage,
     RegisterPage,
-    LogoutPage,
+    SettingsPage,
     ForgotPasswordPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, AuthService]
