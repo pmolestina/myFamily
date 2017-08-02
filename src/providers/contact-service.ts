@@ -10,10 +10,17 @@ import 'rxjs/add/operator/map';
   for more info on providers and Angular 2 DI.
 */
 @Injectable()
-export class Contacts {
+export class ContactService {
 
-  constructor(af: AngularFire) {
+  constructor(private af: AngularFire) {
     console.log('Hello Contacts Provider');
   }
-
+  getContacts(){
+    return this.af.database.list('/contacts',{
+      query:{
+        orderByChild:'name',
+        limitToFirst: 10
+      }
+    });
+  }
 }

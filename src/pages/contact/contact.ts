@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import {AngularFire, FirebaseListObservable} from 'angularfire2';
-
+import { ContactService } from '../../providers/contact-service';
 import { NavController, AlertController, 
         ActionSheetController, ItemSliding, LoadingController 
         } from 'ionic-angular';
 import {DetailPage} from '../detail/detail';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 @Component({
@@ -14,12 +14,12 @@ import 'rxjs/add/operator/do';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
-  contacts: FirebaseListObservable<any>;
+  contacts: any; 
   filteredContacts: any;
   searchTerm: string = '';
   constructor(public navCtrl: NavController,
               public alertCtrl: AlertController, 
-              af: AngularFire,
+              contactService: ContactService,
               public actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController,
               ) {
@@ -27,12 +27,7 @@ export class ContactPage {
       content: 'Please wait...'
     });
     loading.present();
-    this.contacts = af.database.list('/contacts',{
-      query:{
-        orderByChild:'name',
-        limitToFirst: 10
-      }
-    });
+    this.contacts = contactService.getContacts();
     this.filterContacts();
     loading.dismiss();
   }
