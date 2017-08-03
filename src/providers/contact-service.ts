@@ -11,24 +11,16 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class ContactService {
-  contacts: FirebaseListObservable<any[]>;
+
   constructor(private af: AngularFire) {
-    
+    console.log('Hello Contacts Provider');
   }
   getContacts(){
-    this.contacts = this.af.database.list('/contacts',{
+    return this.af.database.list('/contacts',{
       query:{
         orderByChild:'name',
         limitToFirst: 10
       }
-    }) as FirebaseListObservable<ContactModel[]>;
-
-    return this.contacts;
+    });
   }
-}
-export interface ContactModel{
-  $key?:string;
-  name?:string;
-  email?:string;
-  phone?:string;
 }

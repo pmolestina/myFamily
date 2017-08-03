@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import {AngularFire, FirebaseListObservable} from 'angularfire2';
-
-import {ContactService, ContactModel} from '../../providers/contact-service';
-
+import { ContactService } from '../../providers/contact-service';
 import { NavController, AlertController, 
         ActionSheetController, ItemSliding, LoadingController 
         } from 'ionic-angular';
 import {DetailPage} from '../detail/detail';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 @Component({
@@ -16,32 +14,26 @@ import 'rxjs/add/operator/do';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
-  contacts: any;
+  contacts: any; 
   filteredContacts: any;
   searchTerm: string = '';
   constructor(public navCtrl: NavController,
               public alertCtrl: AlertController, 
-              af: AngularFire,
+              private contactService: ContactService,
               public actionSheetCtrl: ActionSheetController,
-              public loadingCtrl: LoadingController,
-              private contactService:ContactService
+              public loadingCtrl: LoadingController
               ) {
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-    /* loading.present();
-    this.contacts = af.database.list('/contacts',{
-      query:{
-        orderByChild:'name',
-        limitToFirst: 10
-      }
-    }) as FirebaseListObservable<Contact[]>;;
+    loading.present();
+    this.contacts = contactService.getContacts();
     this.filterContacts();
-    loading.dismiss(); */
+    loading.dismiss(); 
   }
   ngOnInit(){
     console.log('init..');
-    this.contactService.getContacts().subscribe(contacts  => {
+      this.contactService.getContacts().subscribe(contacts  => {
       this.contacts=contacts;
       this.filterContacts();
     });
