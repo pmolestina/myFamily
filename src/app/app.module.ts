@@ -7,16 +7,9 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
 import { DetailPage } from '../pages/detail/detail';
-<<<<<<< HEAD
-=======
-
->>>>>>> 206b5cd21b14fc673352c6fd07bd62fdba84a1e0
 import { RegisterPage } from '../pages/register/register';
 import { SettingsPage } from '../pages/settings/settings';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
-//services
-import { AuthService } from '../providers/auth-service';
-import { ContactService } from "../providers/contact-service";
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
 //Services
