@@ -36,22 +36,18 @@ export class AuthService {
 
   }
   public login(credentials) {
+    var authConfig = {
+                      provider: AuthProviders.Password,
+                      method: AuthMethods.Password
+                      };
     let validationResponse = new ValidationResponse("login");
     if (credentials.email === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
     } else {
       return Observable.create(observer => {
         let self = this;
-        this.af.auth.login(
-           {
-              provider: AuthProviders.Password,
-              email: credentials.email,
-              password: credentials.password
-            },
-            {
-              provider: AuthProviders.Password,
-              method: AuthMethods.Password
-            }).then(function (response){
+        this.af.auth.login(credentials, authConfig).then(function (response)
+        {
               console.log(response);
               self.currentUser = new User(credentials.email);
               self.currentUser.lastLogin = new Date().toISOString();

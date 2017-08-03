@@ -10,5 +10,8 @@ to add components
 ng generate component [componentname]
 it automatically adds the component to the  app.module.ts
 
+camera options
+https://www.youtube.com/watch?v=-5VIU8o31aQ
+
 
 git push -u origin master

@@ -7,10 +7,12 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
 import { DetailPage } from '../pages/detail/detail';
-import { AuthService } from '../providers/auth-service';
 import { RegisterPage } from '../pages/register/register';
 import { SettingsPage } from '../pages/settings/settings';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
+//services
+import { AuthService } from '../providers/auth-service';
+import { ContactService } from "../providers/contact-service";
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
 
@@ -46,6 +48,7 @@ import {firebaseConfig} from './firebase.config';
     SettingsPage,
     ForgotPasswordPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, AuthService]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, 
+    AuthService, ContactService]
 })
 export class AppModule {}

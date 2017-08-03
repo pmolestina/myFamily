@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
+import {ContactService, ContactModel} from '../../providers/contact-service';
+
 import { NavController, AlertController, 
         ActionSheetController, ItemSliding, LoadingController 
         } from 'ionic-angular';
@@ -14,7 +16,7 @@ import 'rxjs/add/operator/do';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
-  contacts: FirebaseListObservable<any>;
+  contacts: any;
   filteredContacts: any;
   searchTerm: string = '';
   constructor(public navCtrl: NavController,
@@ -22,19 +24,27 @@ export class ContactPage {
               af: AngularFire,
               public actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController,
+              private contactService:ContactService
               ) {
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-    loading.present();
+    /* loading.present();
     this.contacts = af.database.list('/contacts',{
       query:{
         orderByChild:'name',
         limitToFirst: 10
       }
-    });
+    }) as FirebaseListObservable<Contact[]>;;
     this.filterContacts();
-    loading.dismiss();
+    loading.dismiss(); */
+  }
+  ngOnInit(){
+    console.log('init..');
+    this.contactService.getContacts().subscribe(contacts  => {
+      this.contacts=contacts;
+      this.filterContacts();
+    });
   }
 
   //had some issues with filtering list because initial filter was returning another list
@@ -156,4 +166,10 @@ export class ContactPage {
     slidingItem.close();
     this.navCtrl.push(DetailPage,{'contact': contact});
   }
+}
+interface Contact{
+  $key?:string;
+  name?:string;
+  email?:string;
+  phone?:string;
 }
