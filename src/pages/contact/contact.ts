@@ -4,10 +4,10 @@ import { NavController, AlertController,
         ActionSheetController, ItemSliding, LoadingController 
         } from 'ionic-angular';
 import {DetailPage} from '../detail/detail';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
 
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'page-contact',
@@ -15,7 +15,6 @@ import 'rxjs/add/operator/map';
 })
 export class ContactPage {
   contacts: any; 
-  filteredContacts: any;
   searchTerm: string = '';
   constructor(public navCtrl: NavController,
               public alertCtrl: AlertController, 
@@ -27,29 +26,24 @@ export class ContactPage {
       content: 'Please wait...'
     });
     loading.present();
-    this.contacts = contactService.getContacts();
-    this.filterContacts();
+    
     loading.dismiss(); 
   }
   ngOnInit(){
     console.log('init..');
-      this.contactService.getContacts().subscribe(contacts  => {
-      this.contacts=contacts;
-      this.filterContacts();
-    });
+    //removed subscribe() it was cauing the loop with async to fail in the UI
+    //according to this article the subscribe is not needed here
+    //https://stackoverflow.com/questions/35881721/invalid-argument-for-pipe-asyncpipe
+    var result=this.contactService.getContacts(this.searchTerm);
+    this.contacts=result.list;
+    console.log(this.contacts);
   }
 
   //had some issues with filtering list because initial filter was returning another list
   //had to do another filter inside, saw in online tutorial
   //https://www.youtube.com/watch?v=8E-dueHCd2o   31:08
   filterContacts(){
-    this.filteredContacts= this.contacts
-    .map(items=>{
-      const filtered=items
-        .filter(item=>item.name.toLowerCase().indexOf(this.searchTerm.toLowerCase())>-1);
-      return filtered;
-    })
-    .do(item=> console.log(item));
+    this.ngOnInit();
   }
   addContact(){
     let prompt = this.alertCtrl.create({

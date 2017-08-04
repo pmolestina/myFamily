@@ -13,7 +13,7 @@
 <ion-content>
   <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterContacts()"></ion-searchbar>
   <ion-list>
-    <ion-item-sliding #slidingItem *ngFor="let contact of filteredContacts | async">
+    <ion-item-sliding #slidingItem *ngFor="let contact of contacts | async">
       <ion-item  (click)="details(contact, slidingItem)">
           <p>{{contact.name}}</p>
           <p>{{contact.email}}</p>
