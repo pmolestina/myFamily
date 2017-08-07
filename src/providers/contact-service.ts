@@ -15,14 +15,19 @@ export class ContactService {
   constructor(private af: AngularFire) {
     console.log('Hello Contacts Provider');
   }
-  getContacts(searchTerm: string){
-    var result= {list:null,lastKey:''} ;
+  getContacts(search: string, limit){
+    var searchTerm=search.toLowerCase();
+    var result= {list:null,lastKey:'', queryable:null} ;
+   
     var list =this.af.database.list('/contacts',{
       query:{
-        orderByChild:'name',
-        limitToFirst: 1
+        orderByChild:'lowercaseName',
+        limitToLast: 1,
+        startAt:searchTerm,
+        endAt:searchTerm + '\uf8ff'
       }
-    }).map(_items => _items.filter(item => item.name.toLowerCase().indexOf(searchTerm.toLowerCase())>-1));
+    });
+    
     list.subscribe(data=>{
       if(data.length>0)
         result.lastKey=data[0].$key;
@@ -32,10 +37,23 @@ export class ContactService {
 
     result.list= this.af.database.list('/contacts',{
       query:{
-        orderByChild:'name',
-        limitToFirst: 100
+        orderByChild:'lowercaseName',
+        limitToFirst: limit,
+        startAt:searchTerm,
+        endAt:searchTerm + '\uf8ff'
       }
-    }).map(_items => _items.filter(item => item.name.toLowerCase().indexOf(searchTerm.toLowerCase())>-1)) as FirebaseListObservable<any>;
+    });
+    result.list.subscribe((data)=>{
+      if (data.length > 0) {
+              // If the last key in the list equals the last key in the database
+              if (data[data.length - 1].$key === result.lastKey) {
+                  result.queryable = false;
+              } else {
+                  result.queryable = true;
+              }
+          }
+    })
+    //.map(_items => _items.filter(item => item.name.toLowerCase().indexOf(searchTerm.toLowerCase())>-1)) as FirebaseListObservable<any>;
 
     return result as Result;
   }

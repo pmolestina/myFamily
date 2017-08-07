@@ -8,6 +8,7 @@ import {DetailPage} from '../detail/detail';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'page-contact',
@@ -15,13 +16,17 @@ import 'rxjs/add/operator/filter';
 })
 export class ContactPage {
   contacts: any; 
+  result: any;
   searchTerm: string = '';
+  limit:BehaviorSubject<number> = new BehaviorSubject<number>(10);
   constructor(public navCtrl: NavController,
               public alertCtrl: AlertController, 
               private contactService: ContactService,
               public actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController
-              ) {
+              ) 
+  {
+     
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -34,8 +39,8 @@ export class ContactPage {
     //removed subscribe() it was cauing the loop with async to fail in the UI
     //according to this article the subscribe is not needed here
     //https://stackoverflow.com/questions/35881721/invalid-argument-for-pipe-asyncpipe
-    var result=this.contactService.getContacts(this.searchTerm);
-    this.contacts=result.list;
+    this.result=this.contactService.getContacts(this.searchTerm,this.limit);
+    this.contacts=this.result.list;
     console.log(this.contacts);
   }
 
@@ -108,7 +113,8 @@ export class ContactPage {
     actionSheet.present();
   }
 
-  updateContact(contact){
+  updateContact(contact, slidingItem: ItemSliding){
+    slidingItem.close();
     let prompt = this.alertCtrl.create({
       title: 'Contact',
       message: "Update the contact information",
@@ -140,7 +146,8 @@ export class ContactPage {
           text: 'Save',
           handler: data => {
             this.contacts.update(contact.$key, {
-              name: data.name, email:data.email, phone: data.phone
+              name: data.name, email:data.email, phone: data.phone,
+              lowercaseName:data.name.toLowerCase()
             });
           }
         }
@@ -152,6 +159,12 @@ export class ContactPage {
     slidingItem.close();
     this.navCtrl.push(DetailPage,{'contact': contact});
   }
+  scrolled(infiniteScroll): void {
+    if (this.result.queryable) {
+        this.limit.next( this.limit.getValue() + 10);
+    }
+    infiniteScroll.complete();
+}
 }
 interface Contact{
   $key?:string;

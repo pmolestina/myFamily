@@ -14,6 +14,8 @@ camera options
 https://www.youtube.com/watch?v=-5VIU8o31aQ
 pagination
 https://thielcole.github.io/ionic2/2016/11/15/pagination-angularfire2.html
+queries
+https://www.youtube.com/watch?v=sKFLI5FOOHs
 
 
 git push -u origin master
