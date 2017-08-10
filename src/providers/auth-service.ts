@@ -75,13 +75,22 @@ export class AuthService {
     userprofile.on('value', function (snapshot) {
       var currentUser = snapshot.val();
       currentUser.lastLogin=self.currentUser.lastLogin;
-      currentUser.imageUrl=self.currentUser.imageUrl;
       userprofile.set(currentUser);
       self.currentUser=currentUser;
     });
 
   }
-  
+  public saveUserProfilePicture(imageUrl) {
+    var self = this;
+    var userprofile = this.userProfile.child(this.currentUser.id);
+    userprofile.on('value', function (snapshot) {
+      var currentUser = snapshot.val();
+      currentUser.imageUrl=imageUrl;
+      userprofile.set(currentUser);
+      self.currentUser=currentUser;
+    });
+
+  }
   public register(credentials) {
     let validationResponse = new ValidationResponse("register");
     if (credentials.email === null || credentials.password === null) {

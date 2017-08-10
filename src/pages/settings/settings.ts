@@ -63,8 +63,7 @@ export class SettingsPage {
       this.uploadToFirebase(_imageBlob);
     }).then((_uploadSnapshot: any)=>{
       console.log('file uploaded successfully ' + _uploadSnapshot.downloadURL)
-      this.auth.currentUser.imageUrl=_uploadSnapshot.downloadURL;
-      this.auth.saveUserProfile();
+      this.auth.saveUserProfilePicture(_uploadSnapshot.downloadURL);
     }, (_error) => {
       alert('Error ' + _error.message);
     });
