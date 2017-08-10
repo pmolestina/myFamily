@@ -20,7 +20,7 @@ export class TabsPage {
     
   }
   isAuthenticated(){
-    if (this.auth.getUserInfo()==undefined){
+    if (this.auth.currentUser==undefined){
       return false;
     }
     return true;

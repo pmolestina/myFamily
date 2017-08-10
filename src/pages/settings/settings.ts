@@ -13,9 +13,13 @@ import * as firebase from 'firebase';
   templateUrl: 'settings.html'
 })
 export class SettingsPage {
-
+  currentUser: any;
+  displayName: string;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private auth: AuthService, public app: App) { }
+    private auth: AuthService, public app: App) { 
+      this.currentUser=auth.currentUser;
+      this.displayName=auth.userdisplayName;
+    }
 
   logout() {
     console.log('login out');
@@ -31,7 +35,7 @@ export class SettingsPage {
     });
   }
   uploadToFirebase(_imageBlob) {
-    var fileName =  this.auth.currentUser.name + '.jpg';
+    var fileName =  this.auth.currentUser.id + '.jpg';
     return new Promise((resolve, reject)=>{
       var fileRef= firebase.storage().ref('images/' + fileName);
       var uploadTask = fileRef.put(_imageBlob);
@@ -52,13 +56,15 @@ export class SettingsPage {
       targetHeight: 640,
       correctOrientation: true
     }).then((_imagePath) => {
-      alert("Image path " + _imagePath);
+      console.log("Image path " + _imagePath);
       return this.makeFileIntoBlob(_imagePath);
     }).then((_imageBlob) => {
-      alert('got image blob ' + _imageBlob);
+      console.log('got image blob ' + _imageBlob);
       this.uploadToFirebase(_imageBlob);
     }).then((_uploadSnapshot: any)=>{
-      alert('file uploaded successfully ' + _uploadSnapshot.downloadURL)
+      console.log('file uploaded successfully ' + _uploadSnapshot.downloadURL)
+      this.auth.currentUser.imageUrl=_uploadSnapshot.downloadURL;
+      this.auth.saveUserProfile();
     }, (_error) => {
       alert('Error ' + _error.message);
     });

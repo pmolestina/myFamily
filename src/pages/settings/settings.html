@@ -16,10 +16,10 @@
 <ion-list>
   <ion-item>
     <ion-avatar item-left>
-       <img src="http://placehold.it/30x30"/>
+       <img src="{{currentUser.imageUrl}}"/>
     </ion-avatar>
-    <h2>Pepe Molestina</h2>
-    <p>View your profile</p>
+    <h2>{{displayName}}</h2>
+    <p>{{currentUser.email}}</p>
     <button ion-button clear item-right (click)="getPicture()">
       Picture
     </button>

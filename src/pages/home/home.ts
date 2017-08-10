@@ -9,8 +9,8 @@ import { AuthService } from '../../providers/auth-service'
 export class HomePage {
   name = '';
   constructor(public navCtrl: NavController, private auth: AuthService) {
-    let info = this.auth.getUserInfo();
-    this.name=info.name;
+    let info = this.auth.currentUser;
+    this.name=this.auth.userdisplayName;;
   }
   
 }
