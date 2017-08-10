@@ -15,7 +15,7 @@ import * as firebase from 'firebase';
 export class SettingsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private auth: AuthService, public app: App, private af: AngularFire) { }
+    private auth: AuthService, public app: App) { }
 
   logout() {
     console.log('login out');
@@ -31,7 +31,7 @@ export class SettingsPage {
     });
   }
   uploadToFirebase(_imageBlob) {
-    var fileName = 'sample-'  + new Date().getTime() + '.jpg;'
+    var fileName =  this.auth.currentUser.name + '.jpg';
     return new Promise((resolve, reject)=>{
       var fileRef= firebase.storage().ref('images/' + fileName);
       var uploadTask = fileRef.put(_imageBlob);

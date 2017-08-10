@@ -36,3 +36,6 @@ git push -u origin master
 errors
 Unable to find name 'fetch'
 https://stackoverflow.com/questions/42293176/cannot-find-name-fetch
+
+runtime errors
+ionic plugin add cordova-plugin-camera
