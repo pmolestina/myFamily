@@ -6,7 +6,8 @@ import { LoginPage } from '../login/login';
 
 import { Camera } from 'ionic-native';
 import 'whatwg-fetch';
-
+import {AngularFire} from 'angularfire2';
+import * as firebase from 'firebase';
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html'
@@ -14,7 +15,7 @@ import 'whatwg-fetch';
 export class SettingsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private auth: AuthService, public app: App) { }
+    private auth: AuthService, public app: App, private af: AngularFire) { }
 
   logout() {
     console.log('login out');
@@ -23,12 +24,26 @@ export class SettingsPage {
     });
   }
   makeFileIntoBlob(_imagePath) {
-    return fetch(_imagePath).then(_response=>{
+    return fetch(_imagePath).then(_response => {
       return _response.blob();
-    }).then (_blob=>{
+    }).then(_blob => {
       return _blob;
-    })
+    });
+  }
+  uploadToFirebase(_imageBlob) {
+    var fileName = 'sample-'  + new Date().getTime() + '.jpg;'
+    return new Promise((resolve, reject)=>{
+      var fileRef= firebase.storage().ref('images/' + fileName);
+      var uploadTask = fileRef.put(_imageBlob);
 
+      uploadTask.on('state_changed',(_snapshot)=>{
+        console.log('snapshot progress ' + _snapshot);
+      },(_error)=>{
+        reject(_error);
+      },()=>{
+        resolve(uploadTask.snapshot);
+      });
+    });
   }
   getPicture() {
     Camera.getPicture({
@@ -39,6 +54,11 @@ export class SettingsPage {
     }).then((_imagePath) => {
       alert("Image path " + _imagePath);
       return this.makeFileIntoBlob(_imagePath);
+    }).then((_imageBlob) => {
+      alert('got image blob ' + _imageBlob);
+      this.uploadToFirebase(_imageBlob);
+    }).then((_uploadSnapshot: any)=>{
+      alert('file uploaded successfully ' + _uploadSnapshot.downloadURL)
     }, (_error) => {
       alert('Error ' + _error.message);
     });

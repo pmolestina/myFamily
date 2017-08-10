@@ -9,6 +9,9 @@ http://stackoverflow.com/questions/38239883/angularfire-2-sendpasswordresetemail
 to add components
 ng generate component [componentname]
 it automatically adds the component to the  app.module.ts
+to app pages
+ionic g page chats
+
 
 camera options
 https://www.youtube.com/watch?v=-5VIU8o31aQ
