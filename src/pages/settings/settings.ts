@@ -60,11 +60,11 @@ export class SettingsPage {
       return this.makeFileIntoBlob(_imagePath);
     }).then((_imageBlob) => {
       console.log('got image blob ' + _imageBlob);
-      this.uploadToFirebase(_imageBlob);
+      return this.uploadToFirebase(_imageBlob);
     }).then((_uploadSnapshot: any)=>{
       console.log('file uploaded successfully ' + _uploadSnapshot.downloadURL)
       console.log('saving to user profile');
-      this.auth.saveUserProfilePicture(_uploadSnapshot.downloadURL);
+      return this.auth.saveUserProfilePicture(_uploadSnapshot.downloadURL);
     }, (_error) => {
       alert('Error ' + _error.message);
     });
