@@ -75,6 +75,7 @@ export class AuthService {
     userprofile.on('value', function (snapshot) {
       var currentUser = snapshot.val();
       currentUser.lastLogin=self.currentUser.lastLogin;
+      currentUser.imageUrl=self.currentUser.imageUrl;
       userprofile.set(currentUser);
       self.currentUser=currentUser;
     });
