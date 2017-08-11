@@ -64,7 +64,8 @@ export class SettingsPage {
     }).then((_uploadSnapshot: any)=>{
       console.log('file uploaded successfully ' + _uploadSnapshot.downloadURL)
       console.log('saving to user profile');
-      return this.auth.saveUserProfilePicture(_uploadSnapshot.downloadURL);
+      this.auth.currentUser.imageUrl=_uploadSnapshot.downloadURL;
+      return this.auth.updateUserProfile();
     }, (_error) => {
       alert('Error ' + _error.message);
     });

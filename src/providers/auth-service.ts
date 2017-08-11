@@ -10,11 +10,12 @@ export class User {
   email: string;
   lastLogin: string;
   imageUrl: string;
-  constructor(id:string, email: string) {
-    this.id=id;
+  constructor(id: string, email: string) {
+    this.id = id;
     this.email = email;
+    this.name=email;
   }
-  
+
 }
 export class ValidationResponse {
   validRequest: boolean;
@@ -28,11 +29,13 @@ export class ValidationResponse {
 
 @Injectable()
 export class AuthService {
-  currentUser: User;
+  currentUser: any;
   firebaseAuth: any;
   userProfile: any;
   get userdisplayName(): string {
-    return this.currentUser.name? this.currentUser.name:this.currentUser.email;
+    if (this.currentUser==null)
+      return "";
+    return this.currentUser.name ? this.currentUser.name : this.currentUser.email;
   }
   constructor(public af: AngularFire, @Inject(FirebaseApp) fa: any) {
     this.firebaseAuth = fa.auth();
@@ -52,10 +55,17 @@ export class AuthService {
         let self = this;
         this.af.auth.login(credentials, authConfig).then(function (response) {
           console.log(response);
-          self.currentUser = new User(response.auth.uid,credentials.email);
-          self.currentUser.lastLogin = new Date().toISOString();
-          
-          self.saveUserProfile();
+
+          var userprofile = self.userProfile.child(response.auth.uid);
+          userprofile.on('value', function (snapshot) {
+            var currentUser = snapshot.val();
+            if (currentUser == null) {
+              currentUser = new User(response.auth.uid, credentials.email);
+            }
+            currentUser.lastLogin = new Date().toISOString();
+            userprofile.set(currentUser);
+            self.currentUser = currentUser;
+          });
 
           validationResponse.validRequest = true;
           observer.next(validationResponse);
@@ -69,25 +79,19 @@ export class AuthService {
       });
     }
   }
-  public saveUserProfile() {
-    var self = this;
-    var userprofile = this.userProfile.child(this.currentUser.id);
-    userprofile.on('value', function (snapshot) {
-      var currentUser = snapshot.val();
-      currentUser.lastLogin=self.currentUser.lastLogin;
-      userprofile.set(currentUser);
-      self.currentUser=currentUser;
-    });
+  
 
-  }
-  public saveUserProfilePicture(imageUrl) {
+  public updateUserProfile() {
     var self = this;
     var userprofile = this.userProfile.child(this.currentUser.id);
     userprofile.on('value', function (snapshot) {
+      userprofile.set(self.currentUser);
       var currentUser = snapshot.val();
-      currentUser.imageUrl=imageUrl;
+      currentUser.imageUrl = self.currentUser.imageUrl;
+      currentUser.name=self.currentUser.name;
       userprofile.set(currentUser);
-      self.currentUser=currentUser;
+      self.currentUser = currentUser;
+
     });
 
   }
@@ -100,7 +104,7 @@ export class AuthService {
         let self = this;
         this.af.auth.createUser(credentials).then(function (response) {
           console.log(response);
-          self.currentUser = new User(null,credentials.email);
+          self.currentUser = new User(null, credentials.email);
           //create user profile
           self.userProfile.child(response.auth.uid).set(self.currentUser);
           validationResponse.validRequest = true;
@@ -136,7 +140,7 @@ export class AuthService {
       });
     }
   }
-  
+
   public logout() {
     return Observable.create(observer => {
       this.currentUser = null;
