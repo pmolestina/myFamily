@@ -7,10 +7,9 @@ import { AuthService } from '../../providers/auth-service'
   templateUrl: 'home.html'
 })
 export class HomePage {
-  name = '';
+  
   constructor(public navCtrl: NavController, private auth: AuthService) {
-    let info = this.auth.currentUser;
-    this.name=this.auth.userdisplayName;;
+   
   }
   
 }

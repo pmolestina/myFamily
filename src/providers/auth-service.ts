@@ -4,19 +4,6 @@ import { AngularFire, AuthProviders, AuthMethods, FirebaseApp } from 'angularfir
 
 import 'rxjs/add/operator/map';
 
-export class User {
-  id: string;
-  name: string;
-  email: string;
-  lastLogin: string;
-  imageUrl: string;
-  constructor(id: string, email: string) {
-    this.id = id;
-    this.email = email;
-    this.name=email;
-  }
-
-}
 export class ValidationResponse {
   validRequest: boolean;
   message: string;
@@ -29,17 +16,14 @@ export class ValidationResponse {
 
 @Injectable()
 export class AuthService {
-  currentUser: any;
   firebaseAuth: any;
   userProfile: any;
-  get userdisplayName(): string {
-    if (this.currentUser==null)
-      return "";
-    return this.currentUser.name ? this.currentUser.name : this.currentUser.email;
+  get currentUser(): string {
+   
+    return this.firebaseAuth.currentUser;
   }
   constructor(public af: AngularFire, @Inject(FirebaseApp) fa: any) {
     this.firebaseAuth = fa.auth();
-    this.userProfile = fa.database().ref('/userProfile');
 
   }
   public login(credentials) {
@@ -55,18 +39,6 @@ export class AuthService {
         let self = this;
         this.af.auth.login(credentials, authConfig).then(function (response) {
           console.log(response);
-
-          var userprofile = self.userProfile.child(response.auth.uid);
-          userprofile.on('value', function (snapshot) {
-            var currentUser = snapshot.val();
-            if (currentUser == null) {
-              currentUser = new User(response.auth.uid, credentials.email);
-            }
-            currentUser.lastLogin = new Date().toISOString();
-            userprofile.set(currentUser);
-            self.currentUser = currentUser;
-          });
-
           validationResponse.validRequest = true;
           observer.next(validationResponse);
           observer.complete();
@@ -79,22 +51,19 @@ export class AuthService {
       });
     }
   }
-  
 
-  public updateUserProfile() {
-    var self = this;
-    var userprofile = this.userProfile.child(this.currentUser.id);
-    userprofile.on('value', function (snapshot) {
-      userprofile.set(self.currentUser);
-      var currentUser = snapshot.val();
-      currentUser.imageUrl = self.currentUser.imageUrl;
-      currentUser.name=self.currentUser.name;
-      userprofile.set(currentUser);
-      self.currentUser = currentUser;
-
+  public updateUserProfile(profile) {
+    var self=this;
+    this.firebaseAuth.currentUser.updateProfile(profile).then(function () {
+      // Update successful.
+      console.log("update successful");
+    }).catch(function (error) {
+      // An error happened.
+      console.log(error);
     });
 
   }
+
   public register(credentials) {
     let validationResponse = new ValidationResponse("register");
     if (credentials.email === null || credentials.password === null) {
@@ -104,9 +73,6 @@ export class AuthService {
         let self = this;
         this.af.auth.createUser(credentials).then(function (response) {
           console.log(response);
-          self.currentUser = new User(null, credentials.email);
-          //create user profile
-          self.userProfile.child(response.auth.uid).set(self.currentUser);
           validationResponse.validRequest = true;
           observer.next(validationResponse);
           observer.complete();
@@ -143,7 +109,6 @@ export class AuthService {
 
   public logout() {
     return Observable.create(observer => {
-      this.currentUser = null;
       observer.next(true);
       observer.complete();
     });

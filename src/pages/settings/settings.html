@@ -16,15 +16,19 @@
 <ion-list>
   <ion-item>
     <ion-avatar item-left>
-       <img src="{{currentUser.imageUrl}}"/>
+       <img src="{{auth.currentUser.photoURLl}}"/>
     </ion-avatar>
-    <h2>{{displayName}}</h2>
-    <p>{{currentUser.email}}</p>
+    <h2>{{auth.currentUser.displayName}}</h2>
+    <p>{{auth.currentUser.email}}</p>
+    
     <button ion-button clear item-right (click)="getPicture()">
       Picture
     </button>
+    <button ion-button clear item-right (click)="updatename()">
+      name
+    </button>
+    
   </ion-item>
   
 </ion-list>
-
 </ion-content>

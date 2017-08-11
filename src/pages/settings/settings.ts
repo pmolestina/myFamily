@@ -14,11 +14,10 @@ import * as firebase from 'firebase';
 })
 export class SettingsPage {
   currentUser: any;
-  displayName: string;
+  
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private auth: AuthService, public app: App) { 
       this.currentUser=auth.currentUser;
-      this.displayName=auth.userdisplayName;
     }
 
   logout() {
@@ -35,7 +34,7 @@ export class SettingsPage {
     });
   }
   uploadToFirebase(_imageBlob) {
-    var fileName =  this.auth.currentUser.id + '.jpg';
+    var fileName =  this.currentUser.uid + '.jpg';
     return new Promise((resolve, reject)=>{
       var fileRef= firebase.storage().ref('images/' + fileName);
       var uploadTask = fileRef.put(_imageBlob);
@@ -48,6 +47,10 @@ export class SettingsPage {
         resolve(uploadTask.snapshot);
       });
     });
+  }
+  updatename(){
+    var profile = {displayName:'test'};
+    this.auth.updateUserProfile(profile);
   }
   getPicture() {
     Camera.getPicture({
@@ -64,8 +67,8 @@ export class SettingsPage {
     }).then((_uploadSnapshot: any)=>{
       console.log('file uploaded successfully ' + _uploadSnapshot.downloadURL)
       console.log('saving to user profile');
-      this.auth.currentUser.imageUrl=_uploadSnapshot.downloadURL;
-      return this.auth.updateUserProfile();
+      var profile = {photoURL:_uploadSnapshot.downloadURL};
+      return this.auth.updateUserProfile(profile);
     }, (_error) => {
       alert('Error ' + _error.message);
     });
