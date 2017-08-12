@@ -18,7 +18,7 @@ export class ValidationResponse {
 export class AuthService {
   firebaseAuth: any;
   userProfile: any;
-  get currentUser(): string {
+  get currentUser(): any {
    
     return this.firebaseAuth.currentUser;
   }
@@ -54,13 +54,14 @@ export class AuthService {
 
   public updateUserProfile(profile) {
     var self=this;
-    this.firebaseAuth.currentUser.updateProfile(profile).then(function () {
+    return this.firebaseAuth.currentUser.updateProfile(profile);
+    /* this.firebaseAuth.currentUser.updateProfile(profile).then(function () {
       // Update successful.
-      console.log("update successful");
+      console.log("update successful " + self.firebaseAuth.currentUser.displayName);
     }).catch(function (error) {
       // An error happened.
       console.log(error);
-    });
+    }); */
 
   }
 
