@@ -6,7 +6,7 @@ import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { TabsPage } from '../tabs/tabs';
  
 @Component({
-  selector: 'page-main',
+  selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
@@ -38,7 +38,15 @@ export class LoginPage {
       this.showError(error);
     });
   }
- 
+  public loginWithPromise(){
+    let self = this;
+    self.auth.loginWithPromise(this.registerCredentials).then((res:any)=>{
+      if(!res.code)
+        this.nav.setRoot(TabsPage)
+      else
+        alert(res);
+    });
+  }
   showLoading() {
     this.loading = this.loadingCtrl.create({
       content: 'Please wait...'

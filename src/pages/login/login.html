@@ -1,33 +1,27 @@
-<ion-content class="login-content" padding>
-  <ion-row class="logo-row">
-    <ion-col>
-      <img src="http://placehold.it/300x200"/>
-    </ion-col>
-  </ion-row>
-  <div class="box">
-    <form (ngSubmit)="login()" #registerForm="ngForm">
-      <ion-row>
-        <ion-col>
-          <ion-list inset>
-            
-            <ion-item>
-              <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>
-            </ion-item>
-            
-            <ion-item>
-              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="registerCredentials.password" required></ion-input>
-            </ion-item>
-            
-          </ion-list>
-        </ion-col>
-      </ion-row>
-       <ion-row>
-        <ion-col class="signup-col">
-          <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>
-        </ion-col>
-      </ion-row>
-     </form>
-    <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>
-    <button ion-button class="register-btn" block clear (click)="forgotPassword()">Forgot Password</button>
-  </div>
+<ion-header>
+</ion-header>
+<ion-content class="background">
+  <ion-card>
+    <ion-card-header>
+      Login
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list no-lines>
+
+        <ion-item>
+          <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="registerCredentials.password" required></ion-input>
+        </ion-item>
+        <a (click)="forgotPassword()">Forgot Password</a>
+
+        <button ion-button block round outline color="light" (click)="login()">Login</button>
+        <p>OR</p>
+        <button ion-button clear full color="light" (click)="createAccount()">Create New Account</button>
+      </ion-list>
+
+    </ion-card-content>
+  </ion-card>
 </ion-content>

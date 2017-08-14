@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AngularFire, AuthProviders, AuthMethods, FirebaseApp } from 'angularfire2';
-
 import 'rxjs/add/operator/map';
 
 export class ValidationResponse {
@@ -18,26 +17,28 @@ export class ValidationResponse {
 export class AuthService {
   firebaseAuth: any;
   userProfile: any;
+  authConfig:any;
   get currentUser(): any {
    
     return this.firebaseAuth.currentUser;
   }
   constructor(public af: AngularFire, @Inject(FirebaseApp) fa: any) {
     this.firebaseAuth = fa.auth();
-
-  }
-  public login(credentials) {
-    var authConfig = {
+    this.authConfig = {
       provider: AuthProviders.Password,
       method: AuthMethods.Password
     };
+
+  }
+  public login(credentials) {
+    
     let validationResponse = new ValidationResponse("login");
     if (credentials.email === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
     } else {
       return Observable.create(observer => {
         let self = this;
-        this.af.auth.login(credentials, authConfig).then(function (response) {
+        this.af.auth.login(credentials, this.authConfig).then(function (response) {
           console.log(response);
           validationResponse.validRequest = true;
           observer.next(validationResponse);
@@ -51,18 +52,21 @@ export class AuthService {
       });
     }
   }
+  //this is another way of login in using promise instead of observable
+  public loginWithPromise(credentials){
+    return new Promise((resolve, reject)=>{
+      this.af.auth.login(credentials, this.authConfig).then(()=>{
+        resolve(true);
+      }).catch((err)=>{
+        reject(err);
+      })
+    });
+  }
 
   public updateUserProfile(profile) {
     var self=this;
     return this.firebaseAuth.currentUser.updateProfile(profile);
-    /* this.firebaseAuth.currentUser.updateProfile(profile).then(function () {
-      // Update successful.
-      console.log("update successful " + self.firebaseAuth.currentUser.displayName);
-    }).catch(function (error) {
-      // An error happened.
-      console.log(error);
-    }); */
-
+    
   }
 
   public register(credentials) {
