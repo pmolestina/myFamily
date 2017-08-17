@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { App } from 'ionic-angular';
 import { LoginPage } from '../login/login';
@@ -16,11 +16,12 @@ import * as firebase from 'firebase';
 })
 export class SettingsPage {
   currentUser: any;
-  name: string;
+  displayName: string;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private auth: AuthService, public app: App) {
+    private auth: AuthService, public app: App, public zone: NgZone, public alertCtrl: AlertController) {
 
     this.currentUser = auth.currentUser;
+    this.displayName = auth.currentUser.displayName;
   }
 
   logout() {
@@ -53,18 +54,45 @@ export class SettingsPage {
   }
   updatename() {
     var self = this;
-    var profile = { displayName: 'test new' };
-    this.auth.updateUserProfile(profile).then(function () {
-      console.log('update successfull ');
-      self.navCtrl.setRoot(self.navCtrl.getActive().component);
-    }).catch(function (error) {
-      // An error happened.
-      console.log(error);
-    });
+    let alert = this.alertCtrl.create({
+      title: 'Edit Display Name',
+      inputs: [{
+        name: 'displayName',
+        placeholder: 'Display Name',
+        value: this.displayName
+      }],
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel'
+      },
+      {
+        text: 'Save',
+        handler: data => {
+          if (data.displayName) {
+            var profile = { displayName: data.displayName };
+            this.zone.run(() => { })
+            this.auth.updateUserProfile(profile).then(function () {
+              //zone used to update content in page. The work around was to call the line below:
+              //self.navCtrl.setRoot(self.navCtrl.getActive().component);
+              self.zone.run(() => {
+                self.displayName = data.displayName;
+              })
+              console.log('update successfull ');
+            }).catch(function (error) {
+              // An error happened.
+              console.log(error);
+            });
+          }
+        }
+      }
+      ]
+    })
+    alert.present();
+    
   }
 
   getPicture() {
-    var self=this;
+    var self = this;
     Camera.getPicture({
       destinationType: Camera.DestinationType.FILE_URI,
       sourceType: Camera.PictureSourceType.CAMERA,
@@ -78,15 +106,16 @@ export class SettingsPage {
       return this.uploadToFirebase(_imageBlob);
     }).then((_uploadSnapshot: any) => {
       console.log('file uploaded successfully ' + _uploadSnapshot.downloadURL)
-      console.log('saving to user profile');
       var profile = { photoURL: _uploadSnapshot.downloadURL };
+
       this.auth.updateUserProfile(profile).then(function () {
-        console.log('update successfull ');
+        console.log('user profile updated successfull ');
         self.navCtrl.setRoot(self.navCtrl.getActive().component);
       }).catch(function (error) {
         // An error happened.
         console.log(error);
-      });;
+      });
+
     }, (_error) => {
       alert('Error ' + _error.message);
     });
