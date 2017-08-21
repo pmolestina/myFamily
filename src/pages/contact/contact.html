@@ -4,20 +4,20 @@
       Contacts
     </ion-title>
     <ion-buttons end>
-    <button ion-button icon-only (click)="addContact()">
+      <button ion-button icon-only (click)="addContact()">
       <ion-icon name="add"></ion-icon>
     </button>
-</ion-buttons>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content>
   <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterContacts()"></ion-searchbar>
   <ion-list>
     <ion-item-sliding #slidingItem *ngFor="let contact of contacts | async">
-      <ion-item  (click)="details(contact, slidingItem)">
-          <p>{{contact.name}}</p>
-          <p>{{contact.email}}</p>
-          <p>{{contact.phone}}</p>
+      <ion-item (click)="details(contact, slidingItem)">
+        <p>{{contact.name}}</p>
+        <p>{{contact.email}}</p>
+        <p>{{contact.phone}}</p>
       </ion-item>
       <ion-item-options side="right">
         <button ion-button color="danger" (click)="removeContact(contact.$key, slidingItem)">
@@ -34,6 +34,9 @@
     </ion-item-sliding>
   </ion-list>
   <ion-infinite-scroll (ionInfinite)="scrolled($event)">
-   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content>
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
