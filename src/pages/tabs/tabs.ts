@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HomePage } from '../home/home';
-import { UsersPage } from '../users/users';
+import { TodoPage } from '../todo/todo';
 import { ContactPage } from '../contact/contact';
 import { SettingsPage } from '../settings/settings';
 import { AuthService } from '../../providers/auth-service';
@@ -13,7 +13,7 @@ export class TabsPage {
   // should be each tab's root Page
   tab1Root: any = HomePage;
   tab2Root: any = ContactPage;
-  tab3Root: any = UsersPage;
+  tab3Root: any = TodoPage;
   tab4Root: any = SettingsPage;
   
   constructor(private auth: AuthService) {

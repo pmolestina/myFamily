@@ -4,6 +4,7 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { UsersPage } from '../pages/users/users';
+import { TodoPage } from '../pages/todo/todo';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -28,6 +29,7 @@ import {firebaseConfig} from './firebase.config';
     AboutPage,
     ContactPage,
     UsersPage,
+    TodoPage,
     HomePage,
     LoginPage,
     TabsPage,
@@ -47,6 +49,7 @@ import {firebaseConfig} from './firebase.config';
     AboutPage,
     ContactPage,
     UsersPage,
+    TodoPage,
     HomePage,
     LoginPage,
     TabsPage,

@@ -8,25 +8,10 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
-
-
 <ion-content>
-  <userinfo></userinfo>
-<ion-list>
-  <ion-item>
-    <ion-avatar item-left>
-       <img src="{{auth.currentUser.photoURL}}"/>
-    </ion-avatar>
-    <h2 (click)="updatename()">{{displayName}}</h2>
-    <p>{{auth.currentUser.email}}</p>
-    
-    <button ion-button clear item-right (click)="getPicture()">
-      Picture
-    </button>
-  </ion-item>
   
-</ion-list>
-{{name}}
+  <userinfo></userinfo>
+  
+  <button ion-botton (click)="selectusers()">Select users</button>
 </ion-content>

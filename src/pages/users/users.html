@@ -8,6 +8,11 @@
 
   <ion-navbar color="custom">
     <ion-title>Users</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="selectusers()">
+      Select
+    </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -20,8 +25,8 @@
         <ion-avatar item-left>
           <img src="{{key.photoURL}}">
         </ion-avatar>
-        <h3>{{key.displayName}}</h3>
-        <p>online</p>
+        <ion-label>{{key.displayName}}</ion-label>
+        <ion-checkbox [(ngModel)]="key.selected" item-right></ion-checkbox>
       </ion-item>
     </ion-item-sliding>
   </ion-list>

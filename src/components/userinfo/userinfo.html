@@ -1,8 +1,13 @@
-<!--
-  Generated template for the Userinfo component.
+<ion-list>
+  <ion-item>
 
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
--->
+    <ion-avatar item-left>
+      <img src="{{auth.currentUser.photoURL}}" />
+    </ion-avatar>
+    <h2 (click)="updatename()">{{displayName}}</h2>
+    <p>{{auth.currentUser.email}}</p>
 
-{{text}}
+    <button ion-button clear item-right (click)="getPicture()">Picture</button>
+
+  </ion-item>
+</ion-list>

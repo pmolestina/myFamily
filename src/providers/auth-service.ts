@@ -40,7 +40,6 @@ export class AuthService {
       return Observable.throw("Please insert credentials");
     } else {
       return Observable.create(observer => {
-        let self = this;
         this.af.auth.login(credentials, this.authConfig).then(function (response) {
           console.log(response);
           validationResponse.validRequest = true;

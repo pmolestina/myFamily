@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import { UserService } from '../../providers/user-service';
 /*
   Generated class for the Users page.
@@ -12,18 +12,20 @@ import { UserService } from '../../providers/user-service';
   templateUrl: 'users.html'
 })
 export class UsersPage {
+  allusers = [];
   filteredusers = [];
   searchstring = '';
-  constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService) {
-    this.loadusers();
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+     public userservice: UserService, public events: Events) {
 
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad UsersPage');
+  ionViewWillEnter() {
+    this.loadusers();
   }
   loadusers() {
     this.userservice.getallusers().then((res: any) => {
+      this.allusers = res;
       this.filteredusers = res;
     })
   }
@@ -32,12 +34,22 @@ export class UsersPage {
     if (q.trim() == '') {
       return;
     }
-    this.filteredusers = this.filteredusers.filter((v) => {
+    this.filteredusers = this.allusers.filter((v) => {
       if ((v.displayName.toLowerCase().indexOf(q.toLowerCase())) > -1) {
         return true;
       }
       return false;
     })
+  }
+  selectusers() { 
+    var users = this.allusers.filter((v) => {
+      if (v.selected) {
+        return true;
+      }
+      return false;
+    })
+    this.events.publish('users_selected',users);
+    this.navCtrl.pop();
 
   }
 }
