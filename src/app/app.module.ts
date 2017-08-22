@@ -13,6 +13,8 @@ import { SettingsPage } from '../pages/settings/settings';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
+//Components
+import { UserinfoComponent } from '../components/userinfo/userinfo';
 //Services
 import { AuthService } from '../providers/auth-service';
 import { ContactService } from '../providers/contact-service';
@@ -32,7 +34,8 @@ import {firebaseConfig} from './firebase.config';
     DetailPage,
     RegisterPage,
     SettingsPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    UserinfoComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),

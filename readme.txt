@@ -7,6 +7,7 @@ password reset
 http://stackoverflow.com/questions/38239883/angularfire-2-sendpasswordresetemail
 
 to add components
+ionic g component UserInfo
 ng generate component [componentname]
 it automatically adds the component to the  app.module.ts
 to app pages
@@ -27,6 +28,12 @@ https://www.youtube.com/watch?v=2O_8HAsz_gU
 
 deploy with no developer program
 https://www.youtube.com/watch?v=NxvJOf71e0w
+
+chat app
+https://www.youtube.com/watch?v=qiqLLFCTNxA
+
+events
+https://learnionic2.com/2017/03/28/using-events-ionic-2/
 
 git push -u origin master
 
