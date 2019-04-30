@@ -4,7 +4,6 @@ import {AlertController} from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { Camera } from 'ionic-native';
 
-import 'whatwg-fetch';
 import * as firebase from 'firebase';
 
 
@@ -22,11 +21,11 @@ export class UserinfoComponent {
   }
 
   makeFileIntoBlob(_imagePath) {
-    return fetch(_imagePath).then(_response => {
+    /*return fetch(_imagePath).then(_response => {
       return _response.blob();
     }).then(_blob => {
       return _blob;
-    });
+    });*/
   }
   uploadToFirebase(_imageBlob) {
     var fileName = this.currentUser.uid + '.jpg';
